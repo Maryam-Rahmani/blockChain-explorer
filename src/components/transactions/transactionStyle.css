@@ -1,0 +1,96 @@
+.transaction{
+  border:none;
+  width: 300px;
+  height: 60px;
+  margin-left: 10px;
+  padding-top: 0;
+  border-bottom: 1px solid grey;
+}
+
+#transDiv{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  border:none;
+  width: 290px;
+  margin: 5px;
+  height: 50px;
+}
+
+.transInfo{
+  display: flex;
+  flex-direction: column;
+  height: 45;
+  justify-content: space-between;
+  width: 270px;
+  border:none;
+}
+
+.transaction-list{
+  display: flex;
+  flex-direction: column;
+  height: 200px;
+  border: 1px solid grey;
+  width: 340px;
+  position: absolute;
+  overflow: scroll;
+}
+
+.two-trans{
+  display: flex;
+  position: absolute;
+  flex-direction: row;
+  justify-content: space-between;
+  border:none;
+}
+
+span{
+  color: grey;
+}
+
+.blcDivTrans{
+  display: flex;
+  flex-direction: row;
+  padding-left: 5px;
+  padding-right: 5px;
+  background-color: rgb(90, 158, 247);
+  border: none;
+  border-radius: 10px;
+  color: white;
+  font-size: small;
+  align-items: flex-start;
+  margin-bottom: 32px;
+  padding-right: 5px;
+}
+
+.container-body-trans{
+  margin-left: 10px;
+  margin-right: 10px;
+  /*background-color: rgb(199, 247, 247);*/
+}
+
+.one-trans{
+  display: flex;
+  flex-direction: column;
+  border:none;
+  height:400px;
+}
+
+.transTitle{
+  border: 1px solid grey;
+  border-bottom: none;
+  display: flex;
+  flex-direction: column;
+  background-color: rgba(243, 243, 243, 0.76);
+  height: 40px;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  justify-content:center;
+} 
+
+.transBody{
+  display: flex;
+  flex-direction: column;
+  border:none;
+ 
+}

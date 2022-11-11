@@ -1,0 +1,23 @@
+.container{
+  height: 100vh;
+  position: relative;
+  display: grid;
+  grid-template-areas: 
+  "a b"
+  "c d"
+  "e f";
+  align-items: center;
+  justify-content: center;
+}
+
+#b-show{
+  grid-area: c;
+}
+
+#a-show{
+  grid-area: d;
+}
+
+#t-show{
+  grid-area: e;
+}
