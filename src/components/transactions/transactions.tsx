@@ -1,20 +1,13 @@
 import { ITransaction, IAccount } from "../../types";
 import { useData, useInterval, useMaker } from "../../hooks"
-import {  useState, useEffect, useMemo } from 'react';
-import setTransactionsList from "../../functions/setTransaction"
+import {  useState, useEffect} from 'react';
 import TransactionsList from "./transactionsList"
 import { ADDRESSES } from "../../data";
 import "./transactionStyle.css"
 
-
 const TransactionShow = () =>{
-
-  
-  const trans = setTransactionsList()
   const data = useData()
   const maker = useMaker()
-  
-
 
   useEffect (() => {
     const valid_accounts = ADDRESSES.filter((val) => {

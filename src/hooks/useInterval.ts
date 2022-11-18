@@ -1,9 +1,7 @@
-import React, { useState, useEffect, useRef } from 'react';
-
-const useInterval = (func: any, num: number) => {
-  const x = setInterval(func, num)
+const useInterval = (func: Function , num: number) => {
+  const intervals = setInterval(func, num)
   return () => {
-      clearInterval(x)
+      clearInterval(intervals)
   }   
 };
 

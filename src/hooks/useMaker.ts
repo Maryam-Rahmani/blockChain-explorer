@@ -1,57 +1,60 @@
-import { addressGenerator, amountGenerator } from "../utils/index"
-import { idGenerator, randomArrSelect, fitString, txHashGenerator } from "../utils/index"
-import { NEW_ADDRESS_INTERVAL, NEW_TRANSACTION_INTERVAL} from "../constants/index"
-import { NEW_BLOCK_INTERVAL, TRANSACTION_FEE, BLOCK_WINNER_REWARD } from "../constants/index"
-import { IAccount, ITransaction, IBlock } from "../types/index"
-import { useRef, useState, useEffect } from "react"
+import { addressGenerator, amountGenerator } from "../utils/index";
+import { idGenerator, randomArrSelect, txHashGenerator } from "../utils/index";
+import { TRANSACTION_FEE} from "../constants/index";
+import { IAccount, ITransaction, IBlock } from "../types/index";
+import { useRef, useEffect } from "react";
+import useInterval from "./useInterval";
 
 export interface UseMakerProps {
-    ACCOUNTS: Array<IAccount >
+  accounts: IAccount[];
+  makeAccount: (address: string) => void;
+  makeTransaction: (transaction: ITransaction) => void;
+  makeBlock: (block: IBlock) => void;
 }
 
-const useMaker = () => {
+const useMaker = ({
+  accounts,
+  makeAccount,
+  makeTransaction,
+  makeBlock,
+}: UseMakerProps) => {
   const transactions_id = useRef<Array<string>>([])
-  const [list , setList] = useState<Array<string>>([])
-  
+  const dataAccounts = useRef<Array<IAccount>>([])
+
   const onMakeAddressHandler = () => {
     const newAccountAddress = addressGenerator();
-    return newAccountAddress 
+    makeAccount(newAccountAddress) 
   };
 
-  const onMakeTransactionHandler = (ACCOUNTS: IAccount[]) => {
-    // ! You Should Change ACCOUNTS
+  const onMakeTransactionHandler = () => {
     const newTransaction: ITransaction = {
       fee: TRANSACTION_FEE,
       amount: amountGenerator(),
       txHash: txHashGenerator(),
-      to: randomArrSelect(ACCOUNTS)?.address,
-      from: randomArrSelect(ACCOUNTS)?.address,
+      to: randomArrSelect(dataAccounts.current)?.address,
+      from: randomArrSelect(dataAccounts.current)?.address,
     };
     transactions_id.current.push(newTransaction.txHash)
-    return newTransaction
+    makeTransaction(newTransaction)
   };
 
-  const onMakeBlockHandler = (ACCOUNTS: IAccount[]) => {
-    
-    // ! You Should Change ACCOUNTS and CURRENT_TRANSACTIONS
+  const onMakeBlockHandler = () => {
     const newBlock: IBlock = {
       id: idGenerator(),
-      winner: randomArrSelect(ACCOUNTS)?.address,
-      transactions: list //transactions_id.current,
+      winner: randomArrSelect(dataAccounts.current)?.address,
+      transactions: transactions_id.current,
     };
-    //transactions_id.current = []
-    return newBlock
+    makeBlock(newBlock)
   };
-  
-useEffect(() => {
-  setList(transactions_id.current)
-}, [transactions_id.current])
 
-  return {
-    onMakeAddressHandler,
-    onMakeTransactionHandler,
-    onMakeBlockHandler,
-  }
+  useEffect(() => {
+    dataAccounts.current = accounts
+  }, [accounts])
+
+ 
+  useInterval(onMakeAddressHandler, 17000)
+  useInterval(onMakeTransactionHandler, 2000)
+  useInterval(onMakeBlockHandler, 30000)
 };
 
 export default useMaker;

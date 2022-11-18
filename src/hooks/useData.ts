@@ -1,26 +1,23 @@
 import { ADDRESSES } from "../data";
 import { IAccount, IBlock, ITransaction } from "../types";
-import { transaction_list, block_list } from "../functions/index";
 import {  useState, useEffect, useMemo } from 'react';
-import { BLOCK_WINNER_REWARD } from '../constants/index'
+import { BLOCK_WINNER_REWARD } from '../constants/index';
 
 
 const useData = () => {
-  // Define Your States
-
   const [newAccount, setNewAccount] = useState<Array<IAccount>>([])
   const [newTransaction, setNewTransaction] = useState<Array<ITransaction>>([])
   const [newBlock, setNewBlock] = useState<Array<IBlock>>([])
 
-  //const blocks_List = useMemo(() =>{
-   // return newBlock
-  //}, [newBlock])
+  const blocks_list = useMemo(() =>{
+   return newBlock
+  }, [newBlock])
 
-  //const succ_list = useMemo(() =>{
-    //return newTransaction.filter((val) => {
-    //  return val.isSuccess
-   // })
-   // }, [newTransaction])
+const transaction_list = useMemo(() =>{
+    return newTransaction.filter((val) => {
+      return val.isSuccess
+    })
+    }, [newTransaction])
 
 
   const addNewAccount = (address: string) => {
@@ -29,10 +26,7 @@ const useData = () => {
       balance: 0,
       isSuspend: false,
     }
-    if (newAddress.address.length > 2) {
-      ADDRESSES.unshift(newAddress)
-    }
-      
+    ADDRESSES.unshift(newAddress)
     console.log("New Address", address);
   };
  
@@ -42,10 +36,10 @@ const useData = () => {
 
     ADDRESSES.forEach( element => {
       if (element.address === transaction.from && feeValue > element.balance) {
-          transaction_list.unshift({...transaction, isSuccess:false})
+          setNewTransaction(perv => [...perv,{...transaction, isSuccess:false}])
           element.isSuspend = true
       }else if (element.address === transaction.from && feeValue < element.balance ){
-          transaction_list.unshift({...transaction, isSuccess:true})
+        setNewTransaction(perv => [...perv,{...transaction, isSuccess:true}])
           element.balance -= transaction.fee
           ADDRESSES.forEach( val => {
             if (val.address === transaction.to){
@@ -64,42 +58,24 @@ const useData = () => {
           val.balance +=  BLOCK_WINNER_REWARD
         }
       })
-    //setNewBlock([...newBlock, block])
-    if (block.id.length > 2) {
-      block_list.unshift(block)
-    }
-    
+    setNewBlock([...newBlock, block])
     console.log("New Block", block);
     }
     
 
   useEffect(() => {
     setNewAccount(ADDRESSES)
-    
   },[])
 
- 
-  
- useEffect(() => { 
-  setNewTransaction(transaction_list)
- },[])
-
-
- useEffect(() => { 
-  setNewBlock(block_list)
- },[])
-
-    //console.log(blocks_List)
-  
   return {
-    // Return Your States
     newAccount,
     newTransaction,
     newBlock,
     addNewAccount,
     addNewTransaction,
     addNewBlock,
-    //blocks_List
+    blocks_list,
+    transaction_list
   };
 };
 
